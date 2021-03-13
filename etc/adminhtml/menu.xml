@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <update id="magepow" title="Magepow" module="Magepow_AutoRelatedProduct" sortOrder="10" resource="Magepow_AutoRelatedProduct::magepow" />
+    	<add id="Magepow_AutoRelatedProduct::autorelatedproduct" title="Related Product" module="Magepow_AutoRelatedProduct" sortOrder="1" parent="magepow" resource="Magepow_AutoRelatedProduct::autorelatedproduct" />
+        <add id="Magepow_AutoRelatedProduct::autorelatedproduct_rpr" title="Related Product Rules" translate="title" module="Magepow_AutoRelatedProduct" sortOrder="10" resource="Magepow_AutoRelatedProduct::autorelatedproduct_rpr" parent="Magepow_AutoRelatedProduct::autorelatedproduct" action="magepow_autorelatedproduct/rpr/index" dependsOnModule="Magepow_AutoRelatedProduct"/>
+    </menu>
+</config>

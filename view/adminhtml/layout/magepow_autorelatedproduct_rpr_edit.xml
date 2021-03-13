@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+    <referenceContainer name="left">
+        <block class="Magepow\AutoRelatedProduct\Block\Adminhtml\Rpr\Edit\Tabs" name="rpr_edit_tabs">
+            <block class="Magepow\AutoRelatedProduct\Block\Adminhtml\Rpr\Edit\Tab\RuleInfo" name="rpr_edit_tab_ruleinfo"/>
+            <action method="addTab">
+                <argument name="name" xsi:type="string">ruleinfo_section</argument>
+                <argument name="block" xsi:type="string">rpr_edit_tab_ruleinfo</argument>
+            </action>
+            <block class="Magepow\AutoRelatedProduct\Block\Adminhtml\Rpr\Edit\Tab\DisplayItem" name="rpr_edit_tab_displayitem"/>
+            <action method="addTab">
+                <argument name="name" xsi:type="string">displayitem_section</argument>
+                <argument name="block" xsi:type="string">rpr_edit_tab_displayitem</argument>
+            </action>
+            <block class="Magepow\AutoRelatedProduct\Block\Adminhtml\Rpr\Edit\Tab\DisplayConditions" name="rpr_edit_tab_displayconditions"/>
+            <action method="addTab">
+                <argument name="name" xsi:type="string">displayconditions_section</argument>
+                <argument name="block" xsi:type="string">rpr_edit_tab_displayconditions</argument>
+            </action>
+            <block class="Magepow\AutoRelatedProduct\Block\Adminhtml\Rpr\Edit\Tab\BlockSetting" name="rpr_edit_tab_blocksetting"/>
+            <action method="addTab">
+                <argument name="name" xsi:type="string">blocksetting_section</argument>
+                <argument name="block" xsi:type="string">rpr_edit_tab_blocksetting</argument>
+            </action>
+            <block class="Magepow\AutoRelatedProduct\Block\Adminhtml\Rpr\Edit\Tab\Responsive" name="rpr_edit_tab_responsive"/>
+            <action method="addTab">
+                <argument name="name" xsi:type="string">responsive_section</argument>
+                <argument name="block" xsi:type="string">rpr_edit_tab_responsive</argument>
+            </action>
+            <block class="Magepow\AutoRelatedProduct\Block\Adminhtml\Rpr\Edit\Tab\Config" name="rpr_edit_tab_config"/>
+            <action method="addTab">
+                <argument name="name" xsi:type="string">config_section</argument>
+                <argument name="block" xsi:type="string">rpr_edit_tab_config</argument>
+            </action>
+        </block>
+    </referenceContainer>
+    <referenceContainer name="content">
+        <block class="Magepow\AutoRelatedProduct\Block\Adminhtml\Rpr\Edit" name="rpr_edit"/>
+    </referenceContainer>
+    </body>
+</page>

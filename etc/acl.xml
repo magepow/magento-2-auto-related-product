@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+	<acl>
+	    <resources>
+	        <resource id="Magento_Backend::admin">
+	        	<resource id="Magepow_AutoRelatedProduct::magepow" title="Magepow" sortOrder="10">
+	        	    <resource id="Magepow_AutoRelatedProduct::autorelatedproduct" title="Categories Pro" sortOrder="10">
+	        	        <resource id="Magepow_AutoRelatedProduct::autorelatedproduct_rpr" title="Categories Pro Rule" sortOrder="10" />
+	        	    </resource>
+	        	</resource>
+	        </resource>
+	    </resources>
+	</acl>
+</config>
