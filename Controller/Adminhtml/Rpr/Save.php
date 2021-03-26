@@ -3,7 +3,7 @@
 namespace Magepow\AutoRelatedProduct\Controller\Adminhtml\Rpr;
 class Save extends \Magepow\AutoRelatedProduct\Controller\Adminhtml\Rpr
 {
-
+    public $json;
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
@@ -19,8 +19,10 @@ class Save extends \Magepow\AutoRelatedProduct\Controller\Adminhtml\Rpr
         \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
         \Magepow\AutoRelatedProduct\Model\RprFactory $rprFactory,
         \Psr\Log\LoggerInterface $logger,
-        \Magepow\Core\Model\Config\Source\Responsive $responsive
+        \Magepow\Core\Model\Config\Source\Responsive $responsive,
+        \Magento\Framework\Serialize\Serializer\Json $json
     ) {
+        $this->json = $json;
         parent::__construct($context, $coreRegistry, $fileFactory, $dateFilter, $rprFactory, $logger, $responsive);
     }
 
@@ -126,8 +128,8 @@ class Save extends \Magepow\AutoRelatedProduct\Controller\Adminhtml\Rpr
      */
     protected function prepareData($data)
     {
-        $data['display_place'] = 'a:1:{s:10:"conditions";'.serialize($data['parameters']['conditions_display']).'}';
-        $data['display_item'] = 'a:1:{s:10:"conditions";'.serialize($data['parameters']['conditions_item']).'}';
+        $data['display_place'] = ($data['parameters']['conditions_display']!=NULL)? $this->json->serialize($data['parameters']['conditions_display']) : NULL;
+        $data['display_item'] = ($data['parameters']['conditions_item']!=NULL)? $this->json->serialize($data['parameters']['conditions_item']) : NULL;
         return $data;
     }
 }

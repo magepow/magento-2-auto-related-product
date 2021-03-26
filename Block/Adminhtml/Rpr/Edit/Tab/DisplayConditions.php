@@ -20,6 +20,7 @@ class DisplayConditions extends Generic implements TabInterface
     protected $conditions;
     protected $display_to_Category;
     protected $layoutFactory;
+    public $json;
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
@@ -37,6 +38,7 @@ class DisplayConditions extends Generic implements TabInterface
         \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $rendererFieldset,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magepow\AutoRelatedProduct\Model\Options\Category $display_to_Category,
+        \Magento\Framework\Serialize\Serializer\Json $json,
         array $data = []
     ) {
         $this->layoutFactory = $layoutFactory;
@@ -44,6 +46,7 @@ class DisplayConditions extends Generic implements TabInterface
         $this->rendererFieldset = $rendererFieldset;
         $this->conditions = $conditions;
         $this->block_position = $block_position;
+        $this->json=$json;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -119,7 +122,8 @@ class DisplayConditions extends Generic implements TabInterface
         );
 
         $Display_Place_Parameters = $model->getData('display_place');
-        $Display_Place_Parameters = @unserialize($Display_Place_Parameters);
+        ($Display_Place_Parameters!=NULL)?$Display_Place_Parameters = $this->json->unserialize($Display_Place_Parameters):NULL;
+        $Display_Place_Parameters = array('conditions' => $Display_Place_Parameters);
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $modelRule = $objectManager->get('Magento\CatalogWidget\Model\RuleFactory');
         $modelConditions = $modelRule->create();

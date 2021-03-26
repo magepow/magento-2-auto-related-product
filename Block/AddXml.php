@@ -27,13 +27,15 @@ class AddXml extends \Magento\CatalogRule\Model\Rule implements ObserverInterfac
     protected $sqlBuilder;
     public $storeManager;
     public $_customerSession;
+    public $json;
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magepow\AutoRelatedProduct\Model\RprFactory $rprFactory,
         \Magento\CatalogWidget\Model\RuleFactory $ruleFactory,
         \Magento\Rule\Model\Condition\Sql\Builder $sqlBuilder,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Customer\Model\Session $customerSession
+        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Framework\Serialize\Serializer\Json $json
     ){
         $this->productCollectionFactory = $productCollectionFactory;
         $this->rprFactory = $rprFactory;
@@ -41,6 +43,7 @@ class AddXml extends \Magento\CatalogRule\Model\Rule implements ObserverInterfac
         $this->sqlBuilder   = $sqlBuilder;
         $this->storeManager     = $storeManager;
         $this->_customerSession = $customerSession;
+        $this->json = $json;
     }
 
     /**
@@ -207,7 +210,10 @@ class AddXml extends \Magento\CatalogRule\Model\Rule implements ObserverInterfac
 
     public function getDisplayPlace($rule){
         $productID_where_display = NULL;
-        $rule = $this->getRule(@unserialize($rule->getData('display_place')));
+        $display_place = $rule->getData('display_place');
+        ($display_place!=NULL)? $display_place = $this->json->unserialize($display_place) : NULL;
+        $display_place = array('conditions' => $display_place);
+        $rule = $this->getRule($display_place);
         $collection = $this->productCollectionFactory->create();
         $conditions = $rule->getConditions();
         $conditions->collectValidatedAttributes($collection);

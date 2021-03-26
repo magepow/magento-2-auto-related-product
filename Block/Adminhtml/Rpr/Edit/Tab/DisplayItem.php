@@ -19,7 +19,7 @@ class DisplayItem extends Generic implements TabInterface
      * @var \Magento\Rule\Block\Conditions
      */
     protected $conditions;
-
+    public $json;
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
@@ -34,6 +34,7 @@ class DisplayItem extends Generic implements TabInterface
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Rule\Block\Conditions $conditions,
         \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $rendererFieldset,
+        \Magento\Framework\Serialize\Serializer\Json $json,
         array $data = []
     ) {
         // $myfile = fopen("D:/xampp2/htdocs/magentov2/app/code/Magepow/AutoRelatedProduct/Controller/Adminhtml/Rpr/temp.txt", "a+");
@@ -42,6 +43,7 @@ class DisplayItem extends Generic implements TabInterface
         // fclose($myfile);
         $this->rendererFieldset = $rendererFieldset;
         $this->conditions = $conditions;
+        $this->json = $json;
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -94,7 +96,8 @@ class DisplayItem extends Generic implements TabInterface
         $model = $this->_coreRegistry->registry('autorelatedproduct');
 
         $Display_Item_Parameters = $model->getData('display_item');
-        $Display_Item_Parameters = @unserialize($Display_Item_Parameters);
+        ($Display_Item_Parameters!=NULL)? $Display_Item_Parameters = $this->json->unserialize($Display_Item_Parameters) : NULL;
+        $Display_Item_Parameters = array('conditions' => $Display_Item_Parameters);
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $modelRule = $objectManager->get('Magento\CatalogWidget\Model\RuleFactory');
         $modelConditions = $modelRule->create();

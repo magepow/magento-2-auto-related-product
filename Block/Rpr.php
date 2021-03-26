@@ -363,7 +363,10 @@ class Rpr extends \Magento\Catalog\Block\Product\AbstractProduct implements Bloc
         $condition_array = null;
         foreach ($myRules as $rule) {
             if($rule->getData('rule_id') == $ruleId){
-                $condition_rule = $this->getRule(@unserialize($rule->getData('display_item')));
+                $display_item = $rule->getData('display_item');
+                ($display_item!=NULL)? $display_item = $this->json->unserialize($display_item) : NULL;
+                $display_item = array('conditions' => $display_item);
+                $condition_rule = $this->getRule($display_item);
                 $collection = $this->productCollectionFactory->create();
                 $conditions = $condition_rule->getConditions();
                 $conditions->collectValidatedAttributes($collection);
