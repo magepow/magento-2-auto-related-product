@@ -402,16 +402,18 @@ class Rpr extends \Magento\Catalog\Block\Product\AbstractProduct implements Bloc
                 $tmp1_1 = explode(';',$tmp1[0]);
                 $tmp1_2 = explode(';',$tmp1[1]);
                 $count=0;
+                $num=count($this->responsive->getBreakpoints());
                 $responsive = '[';
                 foreach ($this->responsive->getBreakpoints() as $key => $value) {
                     if(isset($tmp1_1[$count])){
-                        if(($key-1)==1920){
+                        if($num==count($this->responsive->getBreakpoints())){
                             $this->setData('slides-To-Show',$tmp1_1[$count]);
                         }
                         $responsive.='{"breakpoint":'.'"'.($key-1).'", "settings": {"slidesToShow": "'.$tmp1_1[$count].'"}}';
                         $count+=1;
                     }
-                    if($key!=361&&$key!=1)$responsive.=', ';
+                    $num--;
+                    if($num)$responsive.=', ';
                 }
                 $responsive .= ']';
                 $count=0;
