@@ -3,29 +3,6 @@
 namespace Magepow\AutoRelatedProduct\Controller\Adminhtml\Rpr;
 class Save extends \Magepow\AutoRelatedProduct\Controller\Adminhtml\Rpr
 {
-    public $json;
-    /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
-     * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
-     * @param \Vendor\Rules\Model\RuleFactory $ruleFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
-        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
-        \Magepow\AutoRelatedProduct\Model\RprFactory $rprFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magepow\Core\Model\Config\Source\Responsive $responsive,
-        \Magento\Framework\Serialize\Serializer\Json $json
-    ) {
-        $this->json = $json;
-        parent::__construct($context, $coreRegistry, $fileFactory, $dateFilter, $rprFactory, $logger, $responsive);
-    }
-
     /**
      * Rule save action
      *
@@ -72,18 +49,18 @@ class Save extends \Magepow\AutoRelatedProduct\Controller\Adminhtml\Rpr
             $data['store_id']=implode(',',$data['store_id']);
             $data['customer_group_id']=implode(',',$data['customer_group_id']);
             $data['block_settings']=$data['block_title'].';'.$data['sort_by'].';'.$data['product_limit'];
-            $data['config']='';
-            $count =0;
-            $data['config']= '';
+            $configArr = [];
+            $breakpointsArr= [];
             foreach ($this->responsive->getBreakpoints() as $key => $value) {
-                if($value == 'mobile') $count+=1;
-                if($count == 0)$data['config'].=$data[$value].';';
-                elseif($count == 1) $data['config'].=$data[$value].' || ';
+                $breakpointsArr[$value]= $data[$value];
             }
-            foreach ($model->slide_option as $key) {
-                $data['config'].=$data[$key];
-                if($key!='review')$data['config'].=';';
+            $configArr['responsive']= $breakpointsArr;
+            $slide_optionArr = [];
+            foreach ($model->slide_option as $option) {
+                $slide_optionArr[$option]= $data[$option];
             }
+            $configArr['config_options']= $slide_optionArr;
+            $data['config']=$this->json->serialize($configArr);
             if(array_key_exists('display_to_category',$data))$data['display_to_category']=implode(',',$data['display_to_category']);
             $data = $this->prepareData($data);
             $model->loadPost($data);

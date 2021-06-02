@@ -340,10 +340,10 @@ class Rpr extends \Magento\Catalog\Block\Product\AbstractProduct implements Bloc
                     ->setCurPage($this->getRequest()->getParam($this->getData('page_var_name'), 1));
                 $displayitems=$this->getDisplayItem($myRules, $choose_rule_to_apply);
                 $this->setConfig($myRules, $choose_rule_to_apply);
-                if(!isset($displayitems)||count($displayitems)<1)return NULL;
+                if(!isset($displayitems)||count($displayitems)<1)return;
                 $collection->addAttributeToFilter('entity_id', array('in' => $displayitems));
                 $collection->setPageSize($this->getMaxProduct())->addAttributeToSort($this->getAttributeName(), $this->getAttributeValue());
-                if($this->getAttributeName()==NULL){
+                if(!$this->getAttributeName()){
                     $collection->getSelect()->order('rand()');
                 }
                 $collection->setPageSize($this->getMaxProduct())->addStoreFilter();
@@ -391,44 +391,39 @@ class Rpr extends \Magento\Catalog\Block\Product\AbstractProduct implements Bloc
     public function getSlideOptions()
     {
         /* Magepow\CategoriesPro\Model\Rule $slide_option and 'responsive' */
-        return array('slide', 'vertical', 'vertical-Swiping', 'infinite', 'autoplay', 'arrows', 'dots', 'fade', 'center-Mode', 'rows', 'speed', 'autoplay-Speed', 'padding', 'responsive');
+        return array('slide', 'slides-To-Show', 'vertical', 'vertical-Swiping', 'infinite', 'autoplay', 'arrows', 'dots', 'fade', 'center-Mode', 'rows', 'speed', 'autoplay-Speed', 'padding', 'responsive');
     }
 
     public function setConfig($totalRules ,$ruleId){
         foreach ($totalRules as $rule) {
-            // echo '<pre>';
             if($rule->getData('rule_id') == $ruleId){
-                $tmp1 = explode(' || ', $rule->getData('config'));
-                $tmp1_1 = explode(';',$tmp1[0]);
-                $tmp1_2 = explode(';',$tmp1[1]);
-                $count=0;
+                $config = $this->json->unserialize($rule->getData('config'));
+                $breakpointsArr = $config['responsive'];
+                $slide_optionArr = $config['config_options'];
                 $num=count($this->responsive->getBreakpoints());
+                $staticNum = $num;
                 $responsive = '[';
                 foreach ($this->responsive->getBreakpoints() as $key => $value) {
-                    if(isset($tmp1_1[$count])){
-                        if($num==count($this->responsive->getBreakpoints())){
-                            $this->setData('slides-To-Show',$tmp1_1[$count]);
+                    if(isset($breakpointsArr[$value])){
+                        if($num==$staticNum){
+                            $this->setData('slides-To-Show',$breakpointsArr[$value]);
                         }
-                        $responsive.='{"breakpoint":'.'"'.($key-1).'", "settings": {"slidesToShow": "'.$tmp1_1[$count].'"}}';
-                        $count+=1;
+                        if($key>1){
+                            $responsive.='{"breakpoint":'.'"'.($key-1).'", "settings": {"slidesToShow": "'.$breakpointsArr[$value].'"}}';
+                            $this->setData($value,$breakpointsArr[$value]);
+                        }
                     }
                     $num--;
-                    if($num)$responsive.=', ';
+                    if($num > 1)$responsive.=', ';
                 }
                 $responsive .= ']';
-                $count=0;
-                foreach ($this->rprFactory->create()->slide_option as $key){
-                    if(isset($tmp1_2[$count])){
-                        $this->setData($key,$tmp1_2[$count]);
-                        if(!empty($this->getData('vertical'))){
-                            if($this->getData('vertical')==="false" && $key=="vertical-Swiping")$this->setData($key,"false");
-                            else if($this->getData('vertical')=="true"&&$key=="fade")$this->setData($key,"false");
-                        }
-                        $count+=1;
+                foreach ($this->rprFactory->create()->slide_option as $option){
+                    if(isset($slide_optionArr[$option])){
+                        $this->setData($option,$slide_optionArr[$option]);
                     }
                 }
                 $this->setData('responsive', $responsive);
-            }
+                    }
         }
     }
 
@@ -443,8 +438,18 @@ class Rpr extends \Magento\Catalog\Block\Product\AbstractProduct implements Bloc
 
     public function getFrontendCfg(){
         if($this->getSlide()) return $this->getSlideOptions();
-
+        $this->addData(array('responsive' =>json_encode($this->getGridOptions())));
         return array('padding', 'responsive');
+    }
+
+    public function getGridOptions()
+    {
+        $options = array();
+        $breakpoints = $this->responsive->getBreakpoints(); ksort($breakpoints);
+        foreach ($breakpoints as $size => $screen) {
+            $options[]= array($size-1 => $this->getData($screen));
+        }
+        return $options;
     }
 
     public function setBlockTitle($block_title){

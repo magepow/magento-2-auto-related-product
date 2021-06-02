@@ -23,24 +23,22 @@ class Edit extends \Magepow\AutoRelatedProduct\Controller\Adminhtml\Rpr
                 $this->_redirect('magepow_autorelatedproduct/*');
                 return;
             }else {
-                $tmp = explode(';',$model->getData('block_settings'));
-                $model->setData('block_title',$tmp[0]);
-                $model->setData('sort_by',$tmp[1]);
-                $model->setData('product_limit',$tmp[2]);
-                $tmp2 = explode(' || ', $model->getData('config'));
-                $tmp2_1 = explode(';',$tmp2[0]);
-                $tmp2_2 = explode(';',$tmp2[1]);
-                $count_responsive =0;
+                $block_settings = explode(';',$model->getData('block_settings'));
+                $model->setData('block_title',$block_settings[0]);
+                $model->setData('sort_by',$block_settings[1]);
+                $model->setData('product_limit',$block_settings[2]);
+                $config = $this->json->unserialize($model->getData('config'));
+                $breakpointsArr = $config['responsive'];
+                $slide_optionArr = $config['config_options'];
                 foreach ($this->responsive->getBreakpoints() as $key => $value) {
-                    if($key!=1){
-                        $model->setData($value,$tmp2_1[$count_responsive]);
-                        $count_responsive+=1;
+                    if($breakpointsArr[$value]!=NULL){
+                        $model->setData($value,$breakpointsArr[$value]);
                     }
                 }
-                $count_config =0 ;
-                foreach ($model->slide_option as $key) {
-                    $model->setData($key,$tmp2_2[$count_config]);
-                    $count_config+=1;
+                foreach ($model->slide_option as $option) {
+                    if($slide_optionArr[$option]!=NULL){
+                        $model->setData($option,$slide_optionArr[$option]);
+                    }
                 }
             }
         }

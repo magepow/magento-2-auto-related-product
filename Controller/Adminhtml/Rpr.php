@@ -31,6 +31,7 @@ abstract class Rpr extends \Magento\Backend\App\Action
      * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
+    protected $json;
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
@@ -46,7 +47,8 @@ abstract class Rpr extends \Magento\Backend\App\Action
         \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
         \Magepow\AutoRelatedProduct\Model\RprFactory $rprFactory,
         \Psr\Log\LoggerInterface $logger,
-        \Magepow\Core\Model\Config\Source\Responsive $responsive
+        \Magepow\Core\Model\Config\Source\Responsive $responsive,
+        \Magento\Framework\Serialize\Serializer\Json $json
     ) {
         parent::__construct($context);
         $this->coreRegistry = $coreRegistry;
@@ -55,6 +57,7 @@ abstract class Rpr extends \Magento\Backend\App\Action
         $this->rprFactory = $rprFactory;
         $this->logger = $logger;
         $this->responsive = $responsive;
+        $this->json = $json;
     }
 
     /**

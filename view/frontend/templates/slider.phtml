@@ -21,6 +21,9 @@ $_helper = $this->helper('Magento\Catalog\Helper\Output');
 $_aloHelper = $this->helper('Magepow\AutoRelatedProduct\Helper\Alothemes');
 $nextPage = ($_productCollection->getCurPage() == $_productCollection->getLastPageNumber()) ? 0 : $_productCollection->getCurPage(+1);
 ?>
+<?php $selector    = 'magepow_autorelatedproduct-'.uniqid(); ?>
+<?php $visible = (int) $this->getData('visible'); $visible++ ?>
+<style type="text/css"><?php echo $this->getData('slide') ? '.' . $selector . ' .item:nth-child(n+' . $visible . '){display: none;} .' . $selector . ' .item{float:left} .' . $selector . ' .grid-slider{display: flex;}' : ''  ?></style>
 <div class="mage-magictabs autorelatedproduct-magepow-tab mc-<?php echo $this->escapeHtml($this->getTypeFilter());?>"
     data-next-page="<?php /* @escapeNotVerified */ echo $nextPage ?>"
     >
@@ -51,7 +54,6 @@ $nextPage = ($_productCollection->getCurPage() == $_productCollection->getLastPa
             <strong><?= $block->escapeHtml(__($block->getBlockTitle())) ?></strong>
         </div>
         <ol class="products list items product-items slider grid-slider"
-            data-slides-To-Show= <?php echo $this->getData('slides-To-Show'); ?>
             <?php 
                 foreach ($this->getFrontendCfg() as $opt){
                     if($opt!="slide" && $opt !='responsive') echo 'data-'.$opt.'= '.$this->getData($opt).' ';
