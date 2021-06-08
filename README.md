@@ -23,7 +23,7 @@ No coding required, you can use Auto related product extension almost anywhere o
 
 ### Look in frontend
 
-![Magento 2 Auto Related Product Pro](https://github.com/magepow/magento-2-auto-related-product/blob/master/media/cart_example.png)
+![Magento 2 Auto Related Product Pro](https://github.com/magepow/magento-2-auto-related-product/blob/master/media/result_autorelated1.png)
 
 ### Advantages
 
