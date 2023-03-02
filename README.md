@@ -1,3 +1,5 @@
+[<img src="https://github.com/magepow/themeforest/blob/master/shopify/shopify_affiliate.jpg" >](https://shopify.pxf.io/VyL446)
+
 ## Magento 2 Auto Related Product
 
 Auto Related Product extension for Magento 2 allows users to setup a group of same characteristic products which helps customers find their favorite items easily.
