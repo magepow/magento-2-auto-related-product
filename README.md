@@ -111,7 +111,7 @@ Select Specific Categories to choose which to display.
 ![Magento 2 Extention Auto Related Product Pro](https://github.com/magepow/magento-2-auto-related-product/blob/master/media/config_rule2.png)
 
 ### Buy it
-  [Buy it on Magepow](https://magepow.net/magento-2-categories-extension.html)
+  [Buy it on Magepow](https://magepow.net/magento-2-auto-related-products.html)
   
 ## Donation
 
